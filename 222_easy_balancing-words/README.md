@@ -8,14 +8,17 @@ STEAD balances at T: 1 * S(19) = 1 * E(5) + 2 * A(1) + 3 * D(4))
 
 # Input Description
 You'll be given a series of English words. Example:
+
     STEAD
 
 # Output Description
 Your program or function should emit the words split by their balance point and the weight on either side of the balance point. Example:
-    S T EAD - 19
-This indicates that the T is the balance point and that the weight on either side is 19.
-Challenge Input
 
+    S T EAD - 19
+
+This indicates that the T is the balance point and that the weight on either side is 19.
+
+# Challenge Input
     CONSUBSTANTIATION
     WRONGHEADED
     UNINTELLIGIBILITY
