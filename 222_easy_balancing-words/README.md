@@ -26,6 +26,7 @@ This indicates that the T is the balance point and that the weight on either sid
 
 # Challenge Output
 _Updated_ - the weights and answers I had originally were wrong. My apologies.
+
     CONSUBST A NTIATION - 456
     WRO N GHEADED - 120
     UNINTELL I GIBILITY - 521
