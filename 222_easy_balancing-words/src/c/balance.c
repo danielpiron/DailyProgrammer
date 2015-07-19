@@ -76,5 +76,6 @@ struct pivot_weight balance(char* word) {
 }
 
 int main(int argc, char **argv) {
+    /* TODO: Capture user input. */
     return 0;
 }
