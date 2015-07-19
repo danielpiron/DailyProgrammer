@@ -19,28 +19,32 @@ import sys
 
 
 def balance(word):
-    '''Attempt to balance a word. Returns a tuple with the index of the
+    ''' Attempt to balance a word. Returns a tuple with the index of the
     pivot and the balanced weight.
-    Example: (1, 19) for the input STEAD'''
+    Example: (1, 19) for the input STEAD
+    NOTE: O(N) algorithm complexity
+    '''
     # Map 'capitalized' letters to their values in the alphabet
     values = [ord(c) - ord('A') + 1 for c in word.upper()]
     # Values multiplied by their distance from the center.
     factored = [v * abs(n - 1) for n, v in enumerate(values)]
     # Start pivot at second character
-    left_side = sum(factored[:1])  # Take the first character
-    right_side = sum(factored[2:])  # Skip 'pivot' and take rest
-    # Amounts to shift to the left and right, respectively, on the first move
-    leftward_shift = sum(values[:1])
-    rightward_shift = sum(values[1:])
-    # Attempt to find a balancing point
+    l_weight = sum(factored[:1])  # Take the first character
+    r_weight = sum(factored[2:])  # Skip 'pivot' and take rest
+    # Amounts to shift weight onto the left and right respectively
+    l_shift = sum(values[:1])
+    r_shift = sum(values[1:])
+    # Check for balance from second character thru second to last character.
     for pivot in range(1, len(word) - 1):
-        if left_side == right_side:
-            return (pivot, left_side)  # I had to pick one
+        if l_weight == r_weight:
+            return (pivot, l_weight)  # I had to pick one
         else:
-            leftward_shift += values[pivot]
-            rightward_shift -= values[pivot]
-            left_side += leftward_shift
-            right_side -= rightward_shift
+            # Shift amounts are adjusted as the pivot is moved
+            l_shift += values[pivot]
+            r_shift -= values[pivot]
+            l_weight += l_shift
+            r_weight -= r_shift
+    # Exiting the loop indicates value to find balance.
     return (None, None)
 
 
