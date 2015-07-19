@@ -17,7 +17,12 @@ D(4))
 
 import sys
 
-
+# This solution is predicated on the fact that multiplication is a form of
+# recursive addition. Instead of calculating weights for each character at
+# every attempt, I use shift amounts, which are initialized to the sum of
+# the values to the left and right of the pivot. These shift amounts have
+# the effect of adjusting how much each letter if factored relative to the
+# location of the trial pivot.
 def balance(word):
     ''' Attempt to balance a word. Returns a tuple with the index of the
     pivot and the balanced weight.
