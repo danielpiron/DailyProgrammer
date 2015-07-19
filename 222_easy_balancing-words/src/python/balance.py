@@ -19,18 +19,29 @@ import sys
 
 
 def balance(word):
-    '''Attempt to balance a word. Returns weight or -1, if no balance
-    could be found.'''
+    '''Attempt to balance a word. Returns a tuple with the index of the
+    pivot and the balanced weight.
+    Example: (1, 19) for the input STEAD'''
     # Map 'capitalized' letters to their values in the alphabet
-    values = [ ord(c) - ord('A') + 1 for c in word.upper() ]
+    values = [ord(c) - ord('A') + 1 for c in word.upper()]
     # Values multiplied by their distance from the center.
-    factored = [ v * (n - 2) for n, v in enumerate(values) ]
+    factored = [v * abs(n - 1) for n, v in enumerate(values)]
     # Start pivot at second character
-    weight_left = sum(factored[:1])
-    weight_right = sum(factored[2:])
-    # Map initial values of each letter into a list. Assume that the first
-    # possible pivot is at the second character.
-    initial_values = [ for v, c in enumerate(word)] 
+    left_side = sum(factored[:1])  # Take the first character
+    right_side = sum(factored[2:])  # Skip 'pivot' and take rest
+    # Amounts to shift to the left and right, respectively, on the first move
+    leftward_shift = sum(values[:1])
+    rightward_shift = sum(values[1:])
+    # Attempt to find a balancing point
+    for pivot in range(1, len(word) - 1):
+        if left_side == right_side:
+            return (pivot, left_side)  # I had to pick one
+        else:
+            leftward_shift += values[pivot]
+            rightward_shift -= values[pivot]
+            left_side += leftward_shift
+            right_side -= rightward_shift
+    return (None, None)
 
 
 def main(argv):
@@ -40,12 +51,14 @@ def main(argv):
 
     word = argv[0]
     if len(word) < 3:
-        print "The word entered should be at least 3 characters long."
+        print 'The word entered should be at least 3 characters long.'
 
-    balance(word)
+    p, w = balance(word)
+    if p is None and w is None:
+        print '%s DOES NOT BALANCE' % word
+        sys.exit(1)
+
+    print '%s %s %s - %i' % (word[:p], word[p], word[p+1:], w)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-
-
-
