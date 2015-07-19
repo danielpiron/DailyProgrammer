@@ -26,5 +26,5 @@ otherwise.
 above. You can make it as long or short as you like, even infinite.
 2. Find the largest degree of any garland word in the enable1 English word
 list.
-3. 3. 3. Find a word list for some other language, and see if you can find a language
+3. Find a word list for some other language, and see if you can find a language
 with a garland word with a higher degree.
