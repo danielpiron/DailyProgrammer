@@ -23,11 +23,9 @@ int garland(char *word) {
 }
 
 int main(int argc, char* argv[]) {
-
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
-
 
     while ((read = getline(&line, &len, stdin)) != -1) {
         if (line[read - 2] == '\r') {
@@ -39,9 +37,8 @@ int main(int argc, char* argv[]) {
             line[read - 1] = '\0';
         }
         int d = garland(line);
-        printf("%s - %d\n", line, d);
+        printf("garland(\"%s\") -> %d\n", line, d);
     }
-
     free(line);
     exit(EXIT_SUCCESS);
 }
