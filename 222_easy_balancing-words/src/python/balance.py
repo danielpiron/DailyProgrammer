@@ -29,17 +29,17 @@ def balance(word):
     Example: (1, 19) for the input STEAD
     NOTE: O(N) algorithm complexity
     '''
-    # Map 'capitalized' letters to their values in the alphabet
+    # Map  letters to their values in the alphabet
     values = [ord(c) - ord('A') + 1 for c in word.upper()]
-    # Values multiplied by their distance from the center.
+    # Multiplies letter values by distance from center
     factored = [v * abs(n - 1) for n, v in enumerate(values)]
-    # Start pivot at second character
-    l_weight = sum(factored[:1])  # Take the first character
-    r_weight = sum(factored[2:])  # Skip 'pivot' and take rest
+    # Initial weights
+    l_weight = sum(factored[:1])
+    r_weight = sum(factored[2:])
     # Amounts to shift weight onto the left and right respectively
     l_shift = sum(values[:1])
     r_shift = sum(values[1:])
-    # Check for balance from second character thru second to last character.
+    # Check for balance from second character thru second to last character
     for pivot in range(1, len(word) - 1):
         if l_weight == r_weight:
             return (pivot, l_weight)  # I had to pick one
@@ -49,7 +49,7 @@ def balance(word):
             r_shift -= values[pivot]
             l_weight += l_shift
             r_weight -= r_shift
-    # Exiting the loop indicates value to find balance.
+    # Exiting the loop indicates value to find balance
     return (None, None)
 
 
