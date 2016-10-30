@@ -74,10 +74,15 @@ int main(int argc, char *argv[])
 	char *word1, *word2;
 	size_t len = 0;
 
-	fp = fopen("../inputs/1.txt", "r");
-	if (fp == NULL) {
-		printf("Couldn't open input\n");
-		exit(EXIT_FAILURE);
+	if (argc > 1) {
+		fp = fopen(argv[1], "r");
+		if (fp == NULL) {
+			printf("Couldn't open input\n");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else {
+		fp = stdin;
 	}
 	
 	while (getline(&line, &len, fp) != -1) {
