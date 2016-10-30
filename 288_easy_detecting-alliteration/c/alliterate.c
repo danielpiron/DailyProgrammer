@@ -1,13 +1,22 @@
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
 #define WHITESPACE " \t"
 
+/**
+ * Return true if the two words given alliterate. (i.e. Start with the
+ * same letter, regardless of case)
+ */
+
+bool words_alliterate(const char *word1, const char *word2) {
+	return tolower(*word1) == tolower(*word2);
+}
 
 int main(int argc, char *argv[])
 {
-	char *last_member;
+	char *last_member = NULL;
 	char *p;
 	char text[] = "Peter Piper picked a peck of pickle peppers";
 
@@ -16,7 +25,7 @@ int main(int argc, char *argv[])
 		if (last_member == NULL) {
 			last_member = p;
 		}
-		else if (tolower(last_member[0]) == tolower(p[0])) {
+		else if (words_alliterate(last_member, p)) {
 			printf("%s\n", last_member);
 			last_member = p;
 		}
