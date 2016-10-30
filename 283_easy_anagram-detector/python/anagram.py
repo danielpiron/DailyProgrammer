@@ -1,5 +1,6 @@
 import os.path
 import re
+import sys
 
 DIR = os.path.abspath(os.path.dirname(__file__))
 INPUT_DIR = os.path.abspath(os.path.join(DIR, '..', 'inputs'))
@@ -26,12 +27,14 @@ def parse_words(line):
     return mo.group(1, 2)
 
 
-def get_input_file(input_id):
-    return open(os.path.join(INPUT_DIR, input_id + '.txt'))
-
-
 if __name__ == '__main__':
-    for line in get_input_file('1'):
+
+    if len(sys.argv) > 1:
+        fp = open(sys.argv[1], 'r')
+    else:
+        fp = sys.stdin
+
+    for line in fp:
         word1, word2 = parse_words(line)
         output = line.strip()
         if is_anagram(word1, word2):
@@ -39,3 +42,4 @@ if __name__ == '__main__':
         else:
             output = output.replace('?', 'is NOT an anagram of')
         print(output)
+    fp.close()
