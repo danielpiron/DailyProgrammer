@@ -1,5 +1,6 @@
 #include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 /**
  * Returns 1 if the given number is Kaprekar number for the
@@ -41,12 +42,19 @@ void kaprekar_range(int start, int end, int base)
 }
 
 int main(int argc, char *argv[]) {
-	int start, end;
+	int start, end, base;
 	char line[LINE_MAX];
+
+	if (argc > 1) {
+		base = atoi(argv[1]);
+	}
+	else {
+		base = 10;
+	}
+
 	while (fgets(line, LINE_MAX, stdin) != NULL) {
 		sscanf(line, "%d %d", &start, &end);
-		kaprekar_range(start, end, 10);
+		kaprekar_range(start, end, base);
 	}
 	return 0;
 }
-
