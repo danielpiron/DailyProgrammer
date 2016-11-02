@@ -1,3 +1,4 @@
+#include <limits.h>
 #include <stdio.h>
 
 /**
@@ -25,13 +26,26 @@ int is_kaprekar(int number, int base)
 	return 0;
 }
 
+/**
+ * Print all kaprekar numbers within the given range
+ **/
+void kaprekar_range(int start, int end, int base)
+{
+	int i;
+	for (i = start; i < end; ++i) {
+		if (is_kaprekar(i, base)) {
+			printf("%d ", i);
+		}
+	}
+	printf("\n");
+}
 
 int main(int argc, char *argv[]) {
-	int i;
-	for (i = 0; i < 1000; ++i) {
-		if (is_kaprekar(i, 10)) {
-			printf("%d\n", i);
-		}
+	int start, end;
+	char line[LINE_MAX];
+	while (fgets(line, LINE_MAX, stdin) != NULL) {
+		sscanf(line, "%d %d", &start, &end);
+		kaprekar_range(start, end, 10);
 	}
 	return 0;
 }
