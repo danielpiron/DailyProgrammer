@@ -9,7 +9,6 @@
 int is_kaprekar(int number, int base)
 {
 	int a, b, n, squared;
-	int in_range;
 
 	squared = number * number;
 	n = base;
@@ -17,8 +16,7 @@ int is_kaprekar(int number, int base)
 	do {
 		a = squared / n;
 		b = squared % n;
-		in_range = b > 0 && b < n;
-		if (in_range && a + b == number) {
+		if (b > 0 && a + b == number) {
 			return 1;
 		}
 		n *= base;
