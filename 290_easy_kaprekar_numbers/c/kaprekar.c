@@ -3,8 +3,7 @@
 #include <stdlib.h>
 
 /**
- * Returns 1 if the given number is Kaprekar number for the
- * given base.
+ * Returns 1 if 'number' is "Kaprekar Number" for the given 'base'
  */
 int is_kaprekar(int number, int base)
 {
@@ -26,7 +25,7 @@ int is_kaprekar(int number, int base)
 }
 
 /**
- * Print all kaprekar numbers within the given range
+ * Print all Kaprekar numbers within the given range
  **/
 void kaprekar_range(int start, int end, int base)
 {
