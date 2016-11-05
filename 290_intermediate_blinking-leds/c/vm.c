@@ -1,24 +1,13 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include "opcodes.h"
-
-#define LED_MEMSIZE 64
-
-typedef struct {
-  struct {
-    uint8_t a, b, pc, sp;
-  } registers;
-  uint8_t memory[LED_MEMSIZE];
-  uint8_t ports[1];
-  int running;
-} VirtualMachine;
+#include "vm.h"
 
 // This may be an overkill, but I wanted to practice my C program organization.
 uint8_t VM_fetch(VirtualMachine *vm) { return vm->memory[vm->registers.pc++]; }
 
 
-void tick(VirtualMachine *m)
+void VM_tick(VirtualMachine *m)
 {
   uint8_t op, data;
   op = VM_fetch(m);
@@ -55,7 +44,7 @@ void tick(VirtualMachine *m)
   }
 }
 
-void dump(VirtualMachine *m) {
+void VM_dump(VirtualMachine *m) {
   int i;
   uint8_t *p;
   printf("Registers:\n");
@@ -77,7 +66,7 @@ void dump(VirtualMachine *m) {
 }
 
 
-void display_led(const VirtualMachine *vm, int port_number) {
+void VM_display_led(const VirtualMachine *vm, int port_number) {
   int i;
   char buffer[9];
   char *p;
@@ -123,12 +112,12 @@ int main(int argc, char *argv[]) {
   vm.running = 1;
 
 
-  dump(&vm);
+  VM_dump(&vm);
   while (vm.running) {
     temp = vm.ports[0];
-    tick(&vm);
+    VM_tick(&vm);
     if (vm.ports[0] != temp)
-      display_led(&vm, 0);
+      VM_display_led(&vm, 0);
   }
-  dump(&vm);
+  VM_dump(&vm);
 }
