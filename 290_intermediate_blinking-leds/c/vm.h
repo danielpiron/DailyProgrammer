@@ -16,8 +16,9 @@ typedef struct {
 } VirtualMachine;
 
 extern uint8_t VM_fetch(VirtualMachine *);
-extern void VM_tick(VirtualMachine *);
-extern void VM_dump(VirtualMachine *);
 extern void VM_display_led(const VirtualMachine *, int);
+extern void VM_dump(VirtualMachine *);
+extern void VM_load_program(VirtualMachine *, const uint8_t *, int);
+extern void VM_tick(VirtualMachine *);
 
 #endif

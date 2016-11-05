@@ -41,6 +41,13 @@ void VM_tick(VirtualMachine *m) {
   }
 }
 
+void VM_load_program(VirtualMachine *vm, const uint8_t *program, int len) {
+  int i;
+  for (i = 0; i < len; i++) {
+    vm->memory[i] = program[i];
+  }
+}
+
 void VM_dump(VirtualMachine *m) {
   int i;
   uint8_t *p;
