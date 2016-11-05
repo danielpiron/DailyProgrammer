@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include "opcodes.h"
 
 #define LED_MEMSIZE 64
 
@@ -16,17 +17,6 @@ typedef struct {
 // This may be an overkill, but I wanted to practice my C program organization.
 uint8_t VM_fetch(VirtualMachine *vm) { return vm->memory[vm->registers.pc++]; }
 
-enum VM_OPCODE 
-{
-  OP_NOP = 0,
-  OP_LDA,
-  OP_LDB,
-  OP_OUTA,
-  OP_RLCA,
-  OP_RRCA,
-  OP_DJNZ,
-  OP_HALT
-};
 
 void tick(VirtualMachine *m)
 {
