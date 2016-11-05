@@ -1,8 +1,7 @@
 #ifndef __OPCODES_H__
 #define __OPCODES_H__
 
-enum VM_OPCODE 
-{
+enum VM_OPCODE {
   OP_NOP = 0,
   OP_LDA,
   OP_LDB,

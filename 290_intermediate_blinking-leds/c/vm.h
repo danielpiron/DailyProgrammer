@@ -1,6 +1,7 @@
 #ifndef __VM_H__
 #define __VM_H__
 
+#include <stdint.h>
 #include "opcodes.h"
 
 #define LED_MEMSIZE 64

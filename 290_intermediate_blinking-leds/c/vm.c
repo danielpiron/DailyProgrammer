@@ -1,12 +1,11 @@
+#include "vm.h"
 #include <stdint.h>
 #include <stdio.h>
-#include "vm.h"
 
 // This may be an overkill, but I wanted to practice my C program organization.
 uint8_t VM_fetch(VirtualMachine *vm) { return vm->memory[vm->registers.pc++]; }
 
-void VM_tick(VirtualMachine *m)
-{
+void VM_tick(VirtualMachine *m) {
   uint8_t op, data;
   op = VM_fetch(m);
   switch (op) {
@@ -33,9 +32,9 @@ void VM_tick(VirtualMachine *m)
     if (--m->registers.b)
       m->registers.pc = data;
     break;
-  case OP_HALT: 
+  case OP_HALT:
     m->running = 0;
-  break;
+    break;
   default:
     printf("Unrecognized op-code %02X\n", op);
     break;
@@ -46,19 +45,15 @@ void VM_dump(VirtualMachine *m) {
   int i;
   uint8_t *p;
   printf("Registers:\n");
-  printf("A: %02X, B: %02X, PC: %02X, SP: %02X\n",
-    m->registers.a,
-    m->registers.b,
-    m->registers.pc,
-    m->registers.sp
-    );
+  printf("A: %02X, B: %02X, PC: %02X, SP: %02X\n", m->registers.a,
+         m->registers.b, m->registers.pc, m->registers.sp);
   printf("Memory:\n");
   p = m->memory;
   for (i = 0; i < LED_MEMSIZE; ++i) {
     if (i && (i & 0x0F) == 0) {
       printf("\n");
     }
-  printf("%02X ", p[i]);
+    printf("%02X ", p[i]);
   }
   printf("Port: %02X\n", m->ports[0]);
 }
