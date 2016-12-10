@@ -1,8 +1,8 @@
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-CC = cc
-CFLAGS =
+CC = clang
+CFLAGS = -g -Wall
 INCLUDES = -I. -I/usr/local/include
 LIBS = -L/usr/local/lib
 SDL_LIBS = -lSDL2 -lSDL2_image
@@ -10,12 +10,18 @@ OBJS = test_sdl.o
 
 test_sdl : $(OBJS)
 	@echo "Building.."
-	cc -o $@ $(OBJS) $(LIBS) $(SDL_LIBS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS) $(SDL_LIBS)
 
 %.o : %.c
-	$(CC) $(INCLUDES) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+.PHONY: clean test
 
 clean:
 	@echo "Cleaning up.."
 	-rm -rf $(OBJS)
 	-rm test_sdl
+
+test: test_sdl
+	@echo "Testing"
+	./test_sdl
