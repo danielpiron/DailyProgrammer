@@ -1,7 +1,6 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include <assert.h>
-#include <stdbool.h>
 #include <stdlib.h>
 
 float get_aspect_ratio(int w, int h) { return (float)w / h; }
@@ -56,6 +55,11 @@ int greyscale(int r, int g, int b) {
 
 SDL_Surface *greyscale_surface(SDL_Surface *surface) {
   SDL_Surface *grey_surface = NULL;
+  Uint8 *src_scanline;
+  Uint8 *dest_scanline;
+  Uint8 *src_pixels = NULL;
+  Uint8 *dest_pixels = NULL;
+  int i, j;
   grey_surface = SDL_CreateRGBSurface(0, surface->w, surface->h,
                                          surface->format->BitsPerPixel,
                                          surface->format->Rmask,
@@ -70,21 +74,19 @@ SDL_Surface *greyscale_surface(SDL_Surface *surface) {
   SDL_LockSurface(surface);
   SDL_LockSurface(grey_surface);
 
-  Uint8 *src_scanline = (Uint8 *)surface->pixels;
-  Uint8 *dest_scanline = (Uint8 *)grey_surface->pixels;
-  Uint8 *src_pixels = NULL;
-  Uint8 *dest_pixels = NULL;
+  src_scanline = (Uint8 *)surface->pixels;
+  dest_scanline = (Uint8 *)grey_surface->pixels;
 
-  int i, j;
   for (i = 0; i < surface->h; i++) {
     src_pixels = src_scanline;
     dest_pixels = dest_scanline;
     for (j = 0; j < surface->w; j++) {
       Uint8 r, g, b;
+      int intensity;
       r = src_pixels[0];
       g = src_pixels[1];
       b = src_pixels[2];
-      int intensity = greyscale(r, g, b);
+      intensity = greyscale(r, g, b);
       dest_pixels[0] = intensity;
       dest_pixels[1] = intensity;
       dest_pixels[2] = intensity;
@@ -100,40 +102,47 @@ SDL_Surface *greyscale_surface(SDL_Surface *surface) {
   return grey_surface;
 }
 
-int main(int argc, char **argv) {
-  bool quit = false;
+int main(int argc, char *argv[]) {
+  SDL_RWops *rwop;
+  SDL_Rect rect;
+  SDL_Renderer *renderer;
+  SDL_Surface *grey_image;
+  SDL_Surface *image;
+  SDL_Texture *texture;
+  SDL_Window *window;
+  int quit = 0;
   int real_width, real_height;
-  SDL_Event event;
+  int w, h;
 
   SDL_Init(SDL_INIT_VIDEO);
 
-  SDL_Window *window =
-      SDL_CreateWindow("SDL2 Displaying Image", SDL_WINDOWPOS_UNDEFINED,
-                       SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_ALLOW_HIGHDPI);
+  window = SDL_CreateWindow("SDL2 Displaying Image", SDL_WINDOWPOS_UNDEFINED,
+                            SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_ALLOW_HIGHDPI);
 
   SDL_GL_GetDrawableSize(window, &real_width, &real_height);
 
-  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+  renderer = SDL_CreateRenderer(window, -1, 0);
   /* SDL_RWops *rwop = SDL_RWFromFile("../data/Portal_Companion_Cube.jpg", "rb"); */
-  SDL_RWops *rwop = SDL_RWFromFile("../data/vero_y_yo.jpg", "rb");
-  SDL_Surface *image = IMG_LoadJPG_RW(rwop);
+  rwop = SDL_RWFromFile("../data/vero_y_yo.jpg", "rb");
+  image = IMG_LoadJPG_RW(rwop);
   if (!image) {
     printf("IMG_LoadJPG_RW: %s\n", IMG_GetError());
   }
-  SDL_Surface *grey_image = greyscale_surface(image);
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, grey_image);
+  grey_image = greyscale_surface(image);
+
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+  texture = SDL_CreateTextureFromSurface(renderer, grey_image);
 
   while (!quit) {
+    SDL_Event event;
     SDL_WaitEvent(&event);
 
     switch (event.type) {
     case SDL_QUIT:
-      quit = true;
+      quit = 1;
       break;
     }
-    int w, h;
-    SDL_Rect rect;
+
     SDL_QueryTexture(texture, NULL, NULL, &w, &h);
     make_fit(&rect, w, h, real_width, real_height);
     rect.x = (real_width - rect.w) / 2;
