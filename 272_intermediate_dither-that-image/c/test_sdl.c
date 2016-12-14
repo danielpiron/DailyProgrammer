@@ -102,6 +102,58 @@ SDL_Surface *greyscale_surface(SDL_Surface *surface) {
   return grey_surface;
 }
 
+SDL_Surface *dithered_surface(SDL_Surface *surface) {
+  SDL_Surface *grey_surface = NULL;
+  Uint8 *src_scanline;
+  Uint8 *dest_scanline;
+  Uint8 *src_pixels = NULL;
+  Uint8 *dest_pixels = NULL;
+  int i, j;
+  const int WHITE = 255;
+  const int BLACK = 0;
+  grey_surface = SDL_CreateRGBSurface(0, surface->w, surface->h,
+                                         surface->format->BitsPerPixel,
+                                         surface->format->Rmask,
+                                         surface->format->Gmask,
+                                         surface->format->Bmask,
+                                         surface->format->Amask);
+
+  if (grey_surface == NULL) {
+    return NULL;
+  }
+
+  SDL_LockSurface(surface);
+  SDL_LockSurface(grey_surface);
+
+  src_scanline = (Uint8 *)surface->pixels;
+  dest_scanline = (Uint8 *)grey_surface->pixels;
+
+  for (i = 0; i < surface->h; i++) {
+    src_pixels = src_scanline;
+    dest_pixels = dest_scanline;
+    for (j = 0; j < surface->w; j++) {
+      Uint8 r, g, b;
+      int intensity;
+      r = src_pixels[0];
+      g = src_pixels[1];
+      b = src_pixels[2];
+      intensity = (greyscale(r, g, b) < 128) ? BLACK : WHITE;
+      dest_pixels[0] = intensity;
+      dest_pixels[1] = intensity;
+      dest_pixels[2] = intensity;
+      src_pixels += 3;
+      dest_pixels += 3;
+    }
+    src_scanline += surface->pitch;
+    dest_scanline += grey_surface->pitch;
+  }
+
+  SDL_UnlockSurface(surface);
+  SDL_UnlockSurface(grey_surface);
+  return grey_surface;
+}
+
+
 int main(int argc, char *argv[]) {
   SDL_RWops *rwop;
   SDL_Rect rect;
@@ -128,7 +180,7 @@ int main(int argc, char *argv[]) {
   if (!image) {
     printf("IMG_LoadJPG_RW: %s\n", IMG_GetError());
   }
-  grey_image = greyscale_surface(image);
+  grey_image = dithered_surface(image);
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
   texture = SDL_CreateTextureFromSurface(renderer, grey_image);
