@@ -2,8 +2,8 @@
 .SUFFIXES: .c .o
 
 CC = clang
-CFLAGS = -g -Wall
-INCLUDES = -I. -I/usr/local/include
+CFLAGS = -g -Wall -std=c89
+INCLUDES = -I. -I/usr/local/include/SDL2
 LIBS = -L/usr/local/lib
 SDL_LIBS = -lSDL2 -lSDL2_image
 OBJS = test_sdl.o
