@@ -106,8 +106,6 @@ SDL_Surface *dithered_surface(SDL_Surface *surface) {
   SDL_Surface *grey_surface = NULL;
   Uint8 *src_scanline;
   Uint8 *dest_scanline;
-  Uint8 *src_pixels = NULL;
-  Uint8 *dest_pixels = NULL;
   int i, j;
   const int WHITE = 255;
   const int BLACK = 0;
@@ -129,8 +127,8 @@ SDL_Surface *dithered_surface(SDL_Surface *surface) {
   dest_scanline = (Uint8 *)grey_surface->pixels;
 
   for (i = 0; i < surface->h; i++) {
-    src_pixels = src_scanline;
-    dest_pixels = dest_scanline;
+    Uint8 *src_pixels = src_scanline;
+    Uint8 *dest_pixels = dest_scanline;
     for (j = 0; j < surface->w; j++) {
       Uint8 r, g, b;
       int intensity;
