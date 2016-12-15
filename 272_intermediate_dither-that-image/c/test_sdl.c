@@ -129,16 +129,19 @@ SDL_Surface *dithered_surface(SDL_Surface *surface) {
   for (i = 0; i < surface->h; i++) {
     Uint8 *src_pixels = src_scanline;
     Uint8 *dest_pixels = dest_scanline;
+    int error = 0;
     for (j = 0; j < surface->w; j++) {
       Uint8 r, g, b;
-      int intensity;
+      int intensity, pixel_color;
       r = src_pixels[0];
       g = src_pixels[1];
       b = src_pixels[2];
-      intensity = (greyscale(r, g, b) < 128) ? BLACK : WHITE;
-      dest_pixels[0] = intensity;
-      dest_pixels[1] = intensity;
-      dest_pixels[2] = intensity;
+      intensity = greyscale(r, g, b) + error;
+      pixel_color = (intensity < 128) ? BLACK : WHITE;
+      error = intensity - pixel_color;
+      dest_pixels[0] = pixel_color;
+      dest_pixels[1] = pixel_color;
+      dest_pixels[2] = pixel_color;
       src_pixels += 3;
       dest_pixels += 3;
     }
