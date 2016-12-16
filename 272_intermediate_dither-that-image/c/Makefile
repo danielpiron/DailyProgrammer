@@ -8,6 +8,10 @@ LIBS = -L/usr/local/lib
 SDL_LIBS = -lSDL2 -lSDL2_image
 OBJS = test_sdl.o
 
+test_dither: test_dither.o
+	$(CC) $(CFLAGS) -o $@ $<
+
+
 test_sdl : $(OBJS)
 	@echo "Building.."
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS) $(SDL_LIBS)
