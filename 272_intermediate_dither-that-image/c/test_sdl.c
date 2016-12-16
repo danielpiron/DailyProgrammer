@@ -50,7 +50,7 @@ void test_runner() {
 }
 
 int greyscale(int r, int g, int b) {
-  return (r + g + b) / 3;
+  return (r * 0.2126 + g * 0.7152 + b * 0.0722);
 }
 
 SDL_Surface *greyscale_surface(SDL_Surface *surface) {
