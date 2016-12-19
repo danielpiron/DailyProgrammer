@@ -106,7 +106,9 @@ SDL_Surface *greyscale_surface(SDL_Surface *surface) {
 uint8_t get_nearest_color(uint8_t in_color) {
   const int BLACK = 0;
   const int WHITE = 255;
-  return (in_color < 128) ? BLACK : WHITE;
+
+  /* return (in_color < 128) ? BLACK : WHITE; */
+  return in_color >> 6 << 6;
 }
 
 int clamp_int(int a) {
@@ -148,6 +150,7 @@ uint8_t *dither_image(uint8_t *image, int w, int h) {
       }
     }
   }
+  free(error_table);
   return dithered;
 }
 
@@ -235,12 +238,14 @@ int main(int argc, char *argv[]) {
 
   renderer = SDL_CreateRenderer(window, -1, 0);
   /* SDL_RWops *rwop = SDL_RWFromFile("../data/Portal_Companion_Cube.jpg", "rb"); */
-  rwop = SDL_RWFromFile("../data/vero_y_yo.jpg", "rb");
+  rwop = SDL_RWFromFile("../data/alex_at_2.jpg", "rb");
   image = IMG_LoadJPG_RW(rwop);
   if (!image) {
     printf("IMG_LoadJPG_RW: %s\n", IMG_GetError());
   }
   grey_image = dithered_surface(image);
+
+  SDL_SaveBMP(grey_image, "dithered.bmp");
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
   texture = SDL_CreateTextureFromSurface(renderer, grey_image);
