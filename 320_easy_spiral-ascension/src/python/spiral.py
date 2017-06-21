@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import sys
 
 
@@ -80,11 +81,16 @@ def spiral(num):
     return format_matrix(m)
 
 
+def positive_integer(value):
+    ivalue = int(value)
+    if ivalue <= 0:
+        raise argparse.ArgumentTypeError('{} is not a positive value'.format(value))
+    return ivalue
+
 if __name__ == '__main__':
 
-    num = int(input('Choose a number to spiral: '))
-    if num < 1:
-        print('Please enter a positive number')
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description='Spiral Challenge')
+    parser.add_argument('number', type=positive_integer, nargs='?')
+    args = parser.parse_args()
 
-    print(spiral(num))
+    print(spiral(args.number))
