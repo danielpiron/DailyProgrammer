@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 def max_number_width_in_row(row):
     ''' Returns the width of the largest value in a matrix row '''
     return max(len(str(value)) for value in row)
