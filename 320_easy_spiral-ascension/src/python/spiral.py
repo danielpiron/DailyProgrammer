@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+import sys
 
 
 def max_number_width_in_row(row):
     ''' Returns the width of the largest value in a matrix row '''
     return max(len(str(value)) for value in row)
-
 
 def max_number_width_in_matrix(matrix):
     ''' Given a matrix, returns with (in characters) of the
@@ -81,4 +81,10 @@ def spiral(num):
 
 
 if __name__ == '__main__':
-    print(spiral(6))
+
+    num = int(input('Choose a number to spiral: '))
+    if num < 1:
+        print('Please enter a positive number')
+        sys.exit(1)
+
+    print(spiral(num))
