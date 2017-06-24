@@ -1,0 +1,1 @@
+cl test_sdl.c /I D:\home\coding\vendors\SDL2-2.0.5\include /I D:\home\coding\vendors\SDL2_image-2.0.1\include /D SDL_MAIN_HANDLED /link  D:\home\coding\vendors\SDL2-2.0.5\lib\x86\SDL2.lib D:\home\coding\vendors\SDL2_image-2.0.1\lib\x86\SDL2_image.lib
