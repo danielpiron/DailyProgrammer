@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+/* #define BW 1 */
+
 float get_aspect_ratio(int w, int h) { return (float)w / h; }
 
 void make_fit(SDL_Rect *rect, int w, int h, int fit_w, int fit_h) {
@@ -107,8 +109,20 @@ uint8_t get_nearest_color(uint8_t in_color) {
   const int BLACK = 0;
   const int WHITE = 255;
 
-  /* return (in_color < 128) ? BLACK : WHITE; */
-  return in_color >> 6 << 6;
+  #ifdef BW
+    return (in_color < 128) ? BLACK : WHITE;
+  #else
+    // return in_color >> 6 << 6;
+    if (in_color < 85) {
+      return 0;
+    }
+    else if (in_color < 170) {
+      return 128;
+    }
+    else {
+      return 255;
+    }
+  #endif
 }
 
 int clamp_int(int a) {
@@ -228,6 +242,7 @@ int main(int argc, char *argv[]) {
   int quit = 0;
   int real_width, real_height;
   int w, h;
+  SDL_Rect ball;
 
   SDL_Init(SDL_INIT_VIDEO);
 
@@ -238,7 +253,7 @@ int main(int argc, char *argv[]) {
 
   renderer = SDL_CreateRenderer(window, -1, 0);
   /* SDL_RWops *rwop = SDL_RWFromFile("../data/Portal_Companion_Cube.jpg", "rb"); */
-  rwop = SDL_RWFromFile("../data/alex_at_2.jpg", "rb");
+  rwop = SDL_RWFromFile("../data/bronx_zoo.jpg", "rb");
   image = IMG_LoadJPG_RW(rwop);
   if (!image) {
     printf("IMG_LoadJPG_RW: %s\n", IMG_GetError());
@@ -250,22 +265,32 @@ int main(int argc, char *argv[]) {
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
   texture = SDL_CreateTextureFromSurface(renderer, grey_image);
 
+  SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+  ball.x = ball.y = 0; 
+  ball.w = ball.h = 48; 
   while (!quit) {
-    SDL_Event event;
-    SDL_WaitEvent(&event);
 
-    switch (event.type) {
-    case SDL_QUIT:
-      quit = 1;
-      break;
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      switch (event.type) {
+      case SDL_QUIT:
+        quit = 1;
+        break;
+      }
     }
 
     SDL_QueryTexture(texture, NULL, NULL, &w, &h);
     make_fit(&rect, w, h, real_width, real_height);
     rect.x = (real_width - rect.w) / 2;
     rect.y = (real_height - rect.h) / 2;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, &rect);
+
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &ball);
+    ball.x += 1;
+
     SDL_RenderPresent(renderer);
   }
 
