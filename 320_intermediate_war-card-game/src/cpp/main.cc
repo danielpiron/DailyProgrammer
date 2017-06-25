@@ -2,6 +2,7 @@
 #include <iostream>
 #include <queue>
 #include <sstream>
+#include <stack>
 #include <string>
 #include <vector>
 
@@ -23,5 +24,10 @@ int main() {
   while (std::getline(f, line)) {
     hands.push_back(parse_hand(line));
   }
+
+  std::stack<int> table;
+  int card = hands[0].front();
+  hands[0].pop();
+  table.push(card);
   return 0;
 }
