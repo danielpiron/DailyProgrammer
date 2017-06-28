@@ -13,8 +13,10 @@ class Game():
             return 0
 
         for _ in range(maxcards):
-            self._cards_on_table[0].append(self._cards[0].pop(0))
-            self._cards_on_table[1].append(self._cards[1].pop(0))
+            if self._cards[0]:
+                self._cards_on_table[0].append(self._cards[0].pop(0))
+            if self._cards[1]:
+                self._cards_on_table[1].append(self._cards[1].pop(0))
 
         player1 = self._cards_on_table[0][-1]
         player2 = self._cards_on_table[1][-1]

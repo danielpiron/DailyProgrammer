@@ -41,6 +41,16 @@ class TestWarCardGame(unittest.TestCase):
         game.deal(1, 1)
         self.assertEqual(1, game.draw_cards())
 
+    def test_cause_uneven_subwar_player1_wins(self):
+        game = war.Game()
+        game.deal(0, 1)
+        game.deal(0, 1)
+        game.deal(0, 1)
+        game.deal(0, 2)
+        game.deal(1, 1)
+        game.deal(1, 2)
+        game.deal(1, 1)
+        self.assertEqual(1, game.draw_cards())
 
 
 if __name__ == '__main__':
